@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/MikiWaraMiki/go-oidc-study/handler"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
