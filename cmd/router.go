@@ -13,6 +13,7 @@ func newRouter() *echo.Echo {
 	e.Use(middleware.Recover())
 
 	e.GET("/", handler.Index)
+	e.GET("/auth", handler.Auth)
 
 	return e
 }
