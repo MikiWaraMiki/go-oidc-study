@@ -16,11 +16,12 @@ func Index(c echo.Context) error {
 
 func Auth(c echo.Context) error {
 	ctx := context.Background()
-	issuer := "https//" + os.Getenv("AUTH0_DOMAIN") + "/"
+	issuer := "https://" + os.Getenv("AUTH0_DOMAIN") + "/"
 	provider, err := oidc.NewProvider(ctx, issuer)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("failed to configration %v", err)
+		return err
 	}
 
 	config := oauth2.Config{
