@@ -7,7 +7,8 @@ require github.com/labstack/echo/v4 v4.6.1
 require (
 	github.com/coreos/go-oidc/v3 v3.1.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/labstack/gommon v0.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.11 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
@@ -19,7 +20,7 @@ require (
 	golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
-	google.golang.org/appengine v1.6.6 // indirect
-	google.golang.org/protobuf v1.25.0 // indirect
-	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 )
