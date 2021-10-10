@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"github.com/MikiWaraMiki/go-oidc-study/handler"
@@ -18,8 +18,8 @@ func newRouter() *echo.Echo {
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("sample"))))
 
 	e.GET("/", handler.Index)
-	e.GET("/auth", login.LoginHandler)
-	e.GET("/callback", callback.CallBackHandler)
+	e.GET("/auth", login.Handler)
+	e.GET("/callback", callback.Handler)
 
 	return e
 }

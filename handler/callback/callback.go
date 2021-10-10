@@ -2,6 +2,7 @@ package callback
 
 import (
 	"context"
+	"encoding/gob"
 	"fmt"
 	"github.com/MikiWaraMiki/go-oidc-study/auth"
 	"github.com/coreos/go-oidc/v3/oidc"
@@ -12,7 +13,8 @@ import (
 	"os"
 )
 
-func CallBackHandler(c echo.Context) error {
+func Handler(c echo.Context) error {
+	log.Printf("callback started")
 	// Get State from session
 	sess, err := session.Get("sample", c)
 	if err != nil {
@@ -29,18 +31,19 @@ func CallBackHandler(c echo.Context) error {
 	authenticator, err := auth.NewAuthenticator()
 	if err != nil {
 		log.Fatalf("failed gen authenticator %v", err)
-		return c.JSON(http.StatusInternalServerError, err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	// Exchange id token
-	token, err := authenticator.Config.Exchange(context.TODO(), c.QueryParam("state"))
+	log.Printf("%v", c.QueryParam("state"))
+	token, err := authenticator.Config.Exchange(context.TODO(), c.QueryParam("code"))
 	if err != nil {
 		log.Printf("unauthorized")
-		return c.JSON(http.StatusUnauthorized, err)
+		return echo.NewHTTPError(http.StatusUnauthorized, err)
 	}
 	rawIdToken, ok := token.Extra("id_token").(string)
 	if !ok {
 		log.Fatalf("failed fetch id_token ")
-		return c.JSON(http.StatusInternalServerError, "failed")
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	// verify id token
@@ -50,7 +53,7 @@ func CallBackHandler(c echo.Context) error {
 	idToken, err := authenticator.Provider.Verifier(oidcConfig).Verify(context.TODO(), rawIdToken)
 	if err != nil {
 		log.Fatalf("failed to verify token: %v", err)
-		return c.JSON(http.StatusInternalServerError, err)
+		return err
 	}
 
 	// get profile data
@@ -58,18 +61,19 @@ func CallBackHandler(c echo.Context) error {
 
 	if err := idToken.Claims(&profile); err != nil {
 		log.Fatalf("failed get user profile data %v", err)
-		return c.JSON(http.StatusInternalServerError, err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	fmt.Printf("%#v", profile)
+	gob.Register(map[string]interface{}{})
 	sess.Values["id_token"] = rawIdToken
 	sess.Values["access_token"] = token.AccessToken
 	sess.Values["profile"] = profile
 	err = sess.Save(c.Request(), c.Response())
 	if err != nil {
 		log.Fatalf("failed save session %v", err)
-		return c.JSON(http.StatusInternalServerError, err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	return c.JSON(http.StatusOK, profile)
+	return c.JSON(http.StatusOK, "login success")
 }

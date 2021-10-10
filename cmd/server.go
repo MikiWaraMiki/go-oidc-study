@@ -1,11 +1,11 @@
-package main
+package cmd
 
 import (
 	"github.com/joho/godotenv"
 	"log"
 )
 
-func main() {
+func StartServer() {
 	err := godotenv.Load()
 
 	if err != nil {

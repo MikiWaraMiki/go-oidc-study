@@ -11,7 +11,7 @@ import (
 	"net/http"
 )
 
-func LoginHandler(c echo.Context) error {
+func Handler(c echo.Context) error {
 	// Gen random state
 	b := make([]byte, 32)
 	_, err := rand.Read(b)
@@ -44,6 +44,7 @@ func LoginHandler(c echo.Context) error {
 	}
 
 	authURL := authenticator.Config.AuthCodeURL(state)
+	log.Printf(authURL)
 
 	return c.Redirect(http.StatusTemporaryRedirect, authURL)
 }
