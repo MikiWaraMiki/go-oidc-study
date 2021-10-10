@@ -13,6 +13,12 @@ import (
 	"os"
 )
 
+type ResponseUserDto struct {
+	Name string `json:"name"`
+	FamilyName string `json:"familyName"`
+	GivenName string `json:"givenName"`
+}
+
 func Handler(c echo.Context) error {
 	log.Printf("callback started")
 	// Get State from session
@@ -75,5 +81,9 @@ func Handler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
-	return c.JSON(http.StatusOK, "login success")
+	if err != nil {
+		log.Fatalf("Failed convert json", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, profile)
 }
